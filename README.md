@@ -1,28 +1,28 @@
 # AkkaClusterEMnify
-
-backend.sh                     // Starts the Backend
-frontend.sh                    // Starts the Frontend
-pom.xml                        // Maven Configuration
-README.md                      // this
-/src                           
- /main                         
-  /com                         
-   /emnify                     
-    /akkacluster               
-     /backend                  
-       BackendMain.java        // Main to start the Backend
-       BackendSupervisor.java  // Akka Actor for internal routing and supervision
-       BackendWorker.java      // Akka Actor for simple Message Processing
-     /frontend                 
-       FrontendActor.java      // Akka Actor with Scheduler to send periodical Messages to the Backend
-       FrontendMain.java       // Main to start the Frontend
-     ResultMessage.java        // Akka Message, including a new String and Double Value
-     StringMessage.java        // Akka Message, including a simple String
+````
+-backend.sh                     // Starts the Backend
+-frontend.sh                    // Starts the Frontend
+-pom.xml                        // Maven Configuration
+-README.md                      // this
+-/src                           
+- /main                         
+-  /com                         
+-   /emnify                     
+-    /akkacluster               
+-     /backend                  
+-       BackendMain.java        // Main to start the Backend
+-       BackendSupervisor.java  // Akka Actor for internal routing and supervision
+-       BackendWorker.java      // Akka Actor for simple Message Processing
+-     /frontend                 
+-       FrontendActor.java      // Akka Actor with Scheduler to send periodical Messages to the Backend
+-       FrontendMain.java       // Main to start the Frontend
+-     ResultMessage.java        // Akka Message, including a new String and Double Value
+-     StringMessage.java        // Akka Message, including a simple String
  /resources                    
    application.config          // General Akka config
    backend.config              // Additional Backend specific Akka config
    frontend.config             // Additional Frontend specific Akka config
-
+````
 Simple Akka Cluster Example.
 It sends a simple String from one or multiple Frontends to one or multiple Backends.
 The String is logged, a Counter Variable is increased and send back to the Frontend with a new String.
