@@ -1,0 +1,38 @@
+---
+
+- name: Clone git repo if not cloned
+  sudo: no
+  action: command
+      creates=/home/{{ username }}/git
+      sudo /usr/bin/git clone {{ ac_repo_url }} /home/{{ username }}/git
+
+- name: Pull git repo
+  sudo: no
+  action: command
+      chdir=/home/{{ username }}/git
+      sudo /usr/bin/git pull
+  register: result
+  
+- name: Set permissions
+  file:
+     path='/home/{{ username }}/git'
+     state=directory
+     owner={{ username }}
+     group={{ username }}
+     recurse=yes  
+
+- debug: var=result.stdout_lines      
+- name: Set git user.name
+  sudo: yes
+  sudo_user: "{{ username }}"
+  action: command
+      chdir=/home/{{ username }}/git 
+      git config user.name "{{ username }}"
+     
+- name: Set git user.email
+  sudo: yes
+  sudo_user: "{{ username }}"
+  action: command
+      chdir=/home/{{ username }}/git 
+      git config user.email "{{ email }}"
+      

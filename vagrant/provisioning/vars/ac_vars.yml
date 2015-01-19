@@ -1,0 +1,10 @@
+---
+
+ac_repo_url: "ssh://git@github.com/SchmittSebastianEMnify/AkkaClusterEMnify.git"
+
+# Akka cluster vars
+seed_nodes: '[\"akka.tcp://ac@10.99.99.101:{{ ac_backend_port }}\"]'
+     
+     # Spc backend vars
+ac_backend_port: 2551
+     

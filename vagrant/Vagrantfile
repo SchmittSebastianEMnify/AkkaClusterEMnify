@@ -1,0 +1,60 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config| 
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id,
+                  "--groups", "/EMnify-dev",
+                  "--memory", "2048"] 
+  end 
+end 
+
+# akkacluster VMs 
+Vagrant.configure("2") do |config|
+  config.vm.define "acfrontend" do |dev|
+    dev.vm.box = "precise64"
+    dev.vm.network :private_network, ip: "10.99.99.100"
+    dev.vm.hostname = "acfrontend"
+    config.ssh.forward_agent = true
+    config.vm.provider :virtualbox do |vb|
+      vb.name = "acfrontend"
+    end
+  end
+
+  config.vm.define "acbackend1" do |be|
+    be.vm.box = "precise64"
+    be.vm.network :private_network, ip: "10.99.99.101"
+    be.vm.hostname = "acbackend1"
+    config.vm.provider :virtualbox do |vb|
+      vb.name = "acbackend1"
+    end
+  end
+  config.vm.define "acbackend2" do |be|
+    be.vm.box = "precise64"
+    be.vm.network :private_network, ip: "10.99.99.102"
+    be.vm.hostname = "acbackend2"
+    config.vm.provider :virtualbox do |vb|
+      vb.name = "acbackend2"
+    end
+  end
+
+end  
+
+Vagrant.configure("2") do |config|
+  config.vm.provision :shell do |shell|
+    shell.inline = "touch $1 && chmod 0440 $1 && echo $2 > $1"
+    shell.args = %q{/etc/sudoers.d/root_ssh_agent "Defaults    env_keep += \"SSH_AUTH_SOCK\""}
+  end
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.groups = {
+      "dev" => ["acfrontend", "acbackend1", "acbackend2"],
+      "all_groups:children" => ["dev"]
+    }
+    ansible.host_key_checking = false
+    ansible.sudo = true
+    ansible.sudo_user = "vagrant"
+    ansible.raw_arguments = "-u vagrant --private-key ~/.vagrant.d/insecure_private_key"
+    ansible.playbook = "provisioning/playbook.yml"
+  end
+end

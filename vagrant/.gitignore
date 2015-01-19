@@ -1,0 +1,10 @@
+**/target
+.project
+.classpath
+.*~
+*~
+sctpclient.log
+.idea
+.DS_Store
+.vagrant
+vagrant_ansible_inventory*

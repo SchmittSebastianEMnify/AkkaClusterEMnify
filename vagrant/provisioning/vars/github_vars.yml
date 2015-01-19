@@ -1,0 +1,5 @@
+---
+name: 'Nikos Loutas'
+email: 'nikos.loutas@emnify.com'
+username: 'nloutas'
+key_file: '~/.ssh/id_rsa'  # Local path to your GitHub private key
