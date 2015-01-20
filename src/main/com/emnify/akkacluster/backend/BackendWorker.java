@@ -21,10 +21,8 @@ public class BackendWorker extends UntypedActor {
     if (message instanceof StringMessage) {
       StringMessage stringMessage = (StringMessage) message;
       MessageCounter++;
-
       log.info("Received Message Number " + MessageCounter + " was: " + stringMessage.getMessage()
           + " from: " + getSender());
-
       ResultMessage resultMessage = new ResultMessage("Got it!", MessageCounter);
       getSender().tell(resultMessage, getSelf());
     } else {
