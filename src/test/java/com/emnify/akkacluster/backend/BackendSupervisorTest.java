@@ -19,7 +19,7 @@ import org.omg.CORBA.INVALID_TRANSACTION;
  * @author nikos
  *
  */
-public class BackendWorkerTest {
+public class BackendSupervisorTest {
   static ActorSystem system;
 
   /**
@@ -47,13 +47,23 @@ public class BackendWorkerTest {
   public void PingPong() {
     new JavaTestKit(system) {
       {
-        final ActorRef service = system.actorOf(Props.create(BackendWorker.class), "backendWorker");
+        final ActorRef service =
+            system.actorOf(Props.create(BackendSupervisor.class), "backendSupervisor");
         final ActorRef probe = getRef();
 
-        StringMessage msg = new StringMessage("test");
+        StringMessage msg = new StringMessage("ok");
         service.tell(msg, probe);
         expectMsgClass(ResultMessage.class);
-
+        service.tell(msg, probe);
+        expectMsgClass(ResultMessage.class);
+        service.tell(msg, probe);
+        expectMsgClass(ResultMessage.class);
+        service.tell(msg, probe);
+        expectMsgClass(ResultMessage.class);
+        service.tell(msg, probe);
+        expectMsgClass(ResultMessage.class);
+        service.tell(msg, probe);
+        expectMsgClass(ResultMessage.class);
       }
     };
   }
