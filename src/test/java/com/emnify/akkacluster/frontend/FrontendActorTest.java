@@ -40,7 +40,7 @@ public class FrontendActorTest {
    * no backend available -> Status.Failure response
    */
   @Test
-  public void NoBackendFailure() {
+  public void testNoBackendFailure() {
     new JavaTestKit(system) {
       {
         final ActorRef service = system.actorOf(Props.create(FrontendActor.class));
@@ -58,7 +58,7 @@ public class FrontendActorTest {
    * unhandled message type-> no response
    */
   @Test
-  public void UnhandledMsg() {
+  public void testUnhandledMsg() {
     new JavaTestKit(system) {
       {
         final ActorRef service = system.actorOf(Props.create(FrontendActor.class));
@@ -74,7 +74,7 @@ public class FrontendActorTest {
    * Register backend -> sending the StringMessage completes successfully
    */
   @Test
-  public void NormalFlow() {
+  public void testNormalFlow() {
 
     new JavaTestKit(system) {
       {
