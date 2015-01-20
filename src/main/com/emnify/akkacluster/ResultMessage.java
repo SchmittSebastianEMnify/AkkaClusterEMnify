@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class ResultMessage implements Serializable {
 
   private final String answerString;
-  private final Double senderCounterValue;
+  private final Long senderCounterValue;
 
-  public ResultMessage(String answerString, Double CounterValue) {
+  public ResultMessage(String answerString, Long CounterValue) {
     this.answerString = answerString;
     this.senderCounterValue = CounterValue;
   }
@@ -16,7 +16,7 @@ public class ResultMessage implements Serializable {
     return this.answerString;
   }
 
-  public Double getSenderCounterValue() {
+  public Long getSenderCounterValue() {
     return this.senderCounterValue;
   }
 }
