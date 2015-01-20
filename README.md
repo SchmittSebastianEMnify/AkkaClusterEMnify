@@ -19,9 +19,9 @@ README.md                      // this
      ResultMessage.java        // Akka Message, including a new String and Long Value
      StringMessage.java        // Akka Message, including a simple String
  /resources                    
-   application.config          // General Akka config
-   backend.config              // Additional Backend specific Akka config
-   frontend.config             // Additional Frontend specific Akka config
+   application.conf          // General Akka config
+   backend.conf              // Additional Backend specific Akka config
+   frontend.conf             // Additional Frontend specific Akka config
 ````
 
 Simple Akka Cluster Example.
