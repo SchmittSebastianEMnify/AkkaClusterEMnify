@@ -8,12 +8,11 @@ import com.typesafe.config.ConfigFactory;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
-import akka.actor.Status;
 import akka.testkit.JavaTestKit;
+import org.jboss.netty.channel.ChannelException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.omg.CORBA.INVALID_TRANSACTION;
 
 /**
  * @author nikos
@@ -52,18 +51,10 @@ public class BackendSupervisorTest {
         final ActorRef probe = getRef();
 
         StringMessage msg = new StringMessage("ok");
-        service.tell(msg, probe);
-        expectMsgClass(ResultMessage.class);
-        service.tell(msg, probe);
-        expectMsgClass(ResultMessage.class);
-        service.tell(msg, probe);
-        expectMsgClass(ResultMessage.class);
-        service.tell(msg, probe);
-        expectMsgClass(ResultMessage.class);
-        service.tell(msg, probe);
-        expectMsgClass(ResultMessage.class);
-        service.tell(msg, probe);
-        expectMsgClass(ResultMessage.class);
+        for (int messagesNumber = 0; messagesNumber < 11; messagesNumber++) {
+          service.tell(msg, probe);
+          expectMsgClass(ResultMessage.class);
+        }
       }
     };
   }
@@ -85,18 +76,10 @@ public class BackendSupervisorTest {
   }
 
   /**
-   * Invalid message Type -> Status.Failure response
+   * Exception while running the main while node is already running on port 2551
    */
-  @Test
+  @Test(expected = ChannelException.class)
   public void FailedStatus() {
-    new JavaTestKit(system) {
-      {
-        final ActorRef service = system.actorOf(Props.create(BackendWorker.class));
-        final ActorRef probe = getRef();
-
-        service.tell(new INVALID_TRANSACTION(), probe);
-        expectMsgClass(Status.Failure.class);
-      }
-    };
+    BackendMain.main(null);
   }
 }

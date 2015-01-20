@@ -8,6 +8,11 @@ import akka.actor.Props;
 
 public class BackendMain {
 
+  /**
+   * Starts the Backend-Node with the preset IP in the application.conf file
+   * 
+   * @param args
+   */
   public static void main(String[] args) {
     Config config = ConfigFactory.load("backend");
     ActorSystem system = ActorSystem.create("clusterSystem", config);
