@@ -16,7 +16,7 @@ README.md                      // this
      /frontend                 
        FrontendActor.java      // Akka Actor with Scheduler to send periodical Messages to the Backend
        FrontendMain.java       // Main to start the Frontend
-     ResultMessage.java        // Akka Message, including a new String and Double Value
+     ResultMessage.java        // Akka Message, including a new String and Long Value
      StringMessage.java        // Akka Message, including a simple String
  /resources                    
    application.config          // General Akka config
@@ -30,7 +30,7 @@ It sends a simple String from one or multiple Frontends to one or multiple Backe
 
 The String is logged, a Counter Variable is increased and send back to the Frontend with a new String.
 
-The Frontend logs the received String, Double-Value and the corresponding sender-actor.
+The Frontend logs the received String, Long-Value and the corresponding sender-actor.
 
 The Frontend uses an adaptive router with mixed metrics to determine which Backend-System the message is send to.
 

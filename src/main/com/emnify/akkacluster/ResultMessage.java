@@ -15,7 +15,7 @@ public class ResultMessage implements Serializable {
 
   private static final long serialVersionUID = 6666437439212966888L;
   private final String answerString;
-  private final Double senderCounterValue;
+  private final Long senderCounterValue;
 
   /** label for watching the workers */
   public static final String BACKEND_REGISTRATION = "BackendRegistration";
@@ -24,7 +24,7 @@ public class ResultMessage implements Serializable {
    * @param answerString
    * @param CounterValue
    */
-  public ResultMessage(String answerString, Double CounterValue) {
+  public ResultMessage(String answerString, Long CounterValue) {
     this.answerString = answerString;
     senderCounterValue = CounterValue;
   }
@@ -39,7 +39,7 @@ public class ResultMessage implements Serializable {
   /**
    * @return senderCounterValue
    */
-  public Double getSenderCounterValue() {
+  public Long getSenderCounterValue() {
     return senderCounterValue;
   }
 
@@ -47,4 +47,5 @@ public class ResultMessage implements Serializable {
   public String toString() {
     return "ResultMessage(" + answerString + ", " + senderCounterValue + ")";
   }
+
 }
