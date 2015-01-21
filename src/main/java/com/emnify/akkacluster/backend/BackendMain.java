@@ -15,7 +15,7 @@ public class BackendMain {
    */
   public static void main(String[] args) {
     Config config = ConfigFactory.load("backend");
-    ActorSystem system = ActorSystem.create("clusterSystem", config);
+    ActorSystem system = ActorSystem.create("ClusterSystem", config);
 
     system.actorOf(Props.create(BackendSupervisor.class), "backendSupervisor");
   }
