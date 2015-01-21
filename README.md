@@ -6,19 +6,20 @@ pom.xml                        // Maven Configuration
 README.md                      // this
 /src                           
  /main                         
-  /com                         
-   /emnify                     
-    /akkacluster               
-     /backend                  
-       BackendMain.java        // Main to start the Backend
-       BackendSupervisor.java  // Akka Actor for internal routing and supervision
-       BackendWorker.java      // Akka Actor for simple Message Processing
-     /frontend                 
-       FrontendActor.java      // Akka Actor with Scheduler to send periodical Messages to the Backend
-       FrontendMain.java       // Main to start the Frontend
-     ResultMessage.java        // Akka Message, including a new String and Long Value
-     StringMessage.java        // Akka Message, including a simple String
- /resources                    
+  /java
+    /com                         
+    /emnify                     
+     /akkacluster               
+      /backend                  
+        BackendMain.java        // Main to start the Backend
+        BackendSupervisor.java  // Akka Actor for internal routing and supervision
+        BackendWorker.java      // Akka Actor for simple Message Processing
+      /frontend                 
+        FrontendActor.java      // Akka Actor with Scheduler to send periodical Messages to the Backend
+        FrontendMain.java       // Main to start the Frontend
+      ResultMessage.java        // Akka Message, including a new String and Long Value
+      StringMessage.java        // Akka Message, including a simple String
+  /resources                    
    application.conf          // General Akka config
    backend.conf              // Additional Backend specific Akka config
    frontend.conf             // Additional Frontend specific Akka config
