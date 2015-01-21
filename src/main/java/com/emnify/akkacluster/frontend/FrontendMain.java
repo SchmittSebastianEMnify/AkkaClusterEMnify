@@ -1,23 +1,22 @@
 package com.emnify.akkacluster.frontend;
 
 import static akka.pattern.Patterns.ask;
+
+import com.emnify.akkacluster.StringMessage;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.dispatch.OnSuccess;
 import akka.util.Timeout;
-
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-
 import scala.concurrent.ExecutionContext;
 import scala.concurrent.duration.Duration;
 import scala.concurrent.duration.FiniteDuration;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import com.emnify.akkacluster.StringMessage;
 
 /**
  * @author akka-sample-cluster-java example from Typesafe
@@ -33,8 +32,8 @@ public class FrontendMain {
     final String port = args.length > 0 ? args[0] : "2551";
     final Config config =
         ConfigFactory.parseString("akka.remote.netty.tcp.port=" + port)
-        .withFallback(ConfigFactory.parseString("akka.cluster.roles = [frontend]"))
-        .withFallback(ConfigFactory.load());
+            .withFallback(ConfigFactory.parseString("akka.cluster.roles = [frontend]"))
+            .withFallback(ConfigFactory.load("frontend"));
 
     ActorSystem system = ActorSystem.create("ClusterSystem", config);
 
@@ -47,12 +46,12 @@ public class FrontendMain {
         interval,
         interval,
         () -> ask(frontend, new StringMessage("hello-" + counter.incrementAndGet()), timeout)
-        .onSuccess(new OnSuccess<Object>() {
-          @Override
-          public void onSuccess(Object result) {
-            System.out.println(result);
-          }
-        }, ec), ec);
+            .onSuccess(new OnSuccess<Object>() {
+              @Override
+              public void onSuccess(Object result) {
+                System.out.println(result);
+              }
+            }, ec), ec);
 
   }
 
