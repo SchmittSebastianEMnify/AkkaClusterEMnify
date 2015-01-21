@@ -28,7 +28,7 @@
   with_items:
       - { key: 'Host', value: 'github.com' }
       - { key: 'User', value: 'git' }
-      - { key: 'IdentityFile', value: '{{ key_file }}' }
+      - { key: 'IdentityFile', value: '/home/{{ username }}/.ssh/{{ key_file | basename }}' }
       - { key: 'StrictHostKeyChecking', value: 'no' }
       - { key: 'UserKnownHostsFile=', value: '/dev/null' }
       
@@ -42,5 +42,7 @@
       insertafter=EOF
   with_items:
       - { key: 'Host', value: 'github.com' }
+      - { key: 'User', value: 'git' }
       - { key: 'StrictHostKeyChecking', value: 'no' }
+      - { key: 'IdentityFile', value: '/home/{{ username }}/.ssh/{{ key_file | basename }}' }
       - { key: 'UserKnownHostsFile=', value: '/dev/null' }      
