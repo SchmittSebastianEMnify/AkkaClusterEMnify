@@ -1,4 +1,5 @@
 target/
+logs/
 bin/
 .settings/
 pom.xml.tag
