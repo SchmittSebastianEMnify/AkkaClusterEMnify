@@ -4,7 +4,11 @@
   <artifactId>akkacluster</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>esc-akkacluster</name>
+  <name>AkkaClusterEMnify</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
   <reporting>
     <plugins>
@@ -46,6 +50,19 @@
         </reportSets>
       </plugin>
 
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>checkstyle</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
     </plugins>
   </reporting>
 
@@ -65,7 +82,7 @@
 			<artifactId>akka-actor_2.10</artifactId>
 			<version>2.3.8</version>
     </dependency>
-        <dependency>
+    <dependency>
       <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-testkit_2.10</artifactId>
       <version>2.3.5</version>
@@ -77,5 +94,23 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <fork>true</fork>
+          <compilerArgs>
+            <arg>-Xlint</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
