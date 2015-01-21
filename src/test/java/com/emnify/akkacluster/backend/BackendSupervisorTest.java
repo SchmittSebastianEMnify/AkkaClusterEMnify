@@ -9,6 +9,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.testkit.JavaTestKit;
+import org.jboss.netty.channel.ChannelException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,7 +18,7 @@ import org.junit.Test;
  * @author nikos
  *
  */
-public class BackendWorkerTest {
+public class BackendSupervisorTest {
   static ActorSystem system;
 
   /**
@@ -45,13 +46,15 @@ public class BackendWorkerTest {
   public void PingPong() {
     new JavaTestKit(system) {
       {
-        final ActorRef service = system.actorOf(Props.create(BackendWorker.class), "backendWorker");
+        final ActorRef service =
+            system.actorOf(Props.create(BackendSupervisor.class), "backendSupervisor");
         final ActorRef probe = getRef();
 
-        StringMessage msg = new StringMessage("test");
-        service.tell(msg, probe);
-        expectMsgClass(ResultMessage.class);
-
+        StringMessage msg = new StringMessage("ok");
+        for (int messagesNumber = 0; messagesNumber < 11; messagesNumber++) {
+          service.tell(msg, probe);
+          expectMsgClass(ResultMessage.class);
+        }
       }
     };
   }
@@ -70,5 +73,13 @@ public class BackendWorkerTest {
         expectNoMsg();
       }
     };
+  }
+
+  /**
+   * Exception while running the main while node is already running on port 2551
+   */
+  @Test(expected = ChannelException.class)
+  public void FailedStatus() {
+    BackendMain.main(null);
   }
 }
