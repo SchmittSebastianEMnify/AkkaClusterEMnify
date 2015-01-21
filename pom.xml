@@ -3,7 +3,6 @@
   <groupId>com.emnify.esc</groupId>
   <artifactId>akkacluster</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
   <name>AkkaClusterEMnify</name>
 
   <properties>
