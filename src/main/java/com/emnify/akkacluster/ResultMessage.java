@@ -3,6 +3,8 @@
  */
 package com.emnify.akkacluster;
 
+import com.emnify.akkacluster.backend.BackendWorker;
+
 import java.io.Serializable;
 
 /**
@@ -22,9 +24,9 @@ public class ResultMessage implements Serializable {
    * @param answerString
    * @param CounterValue
    */
-  public ResultMessage(String answerString, Long CounterValue) {
+  public ResultMessage(String answerString, Long counterValue) {
     this.answerString = answerString;
-    senderCounterValue = CounterValue;
+    senderCounterValue = counterValue;
   }
 
   /**
