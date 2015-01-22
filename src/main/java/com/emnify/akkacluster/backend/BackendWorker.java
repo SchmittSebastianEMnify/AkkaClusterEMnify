@@ -7,23 +7,30 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
+/**
+ * @author
+ *
+ */
 public class BackendWorker extends UntypedActor {
 
   private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-  private Long MessageCounter = 0L;
+  private Long messageCounter = 0L;
 
   /**
    * If StringMessage: Message logging and returning a new String with the increased Worker-intern
-   * MessageCounter
+   * messageCounter
+   *
+   * @param message
+   * @throws Exception
    */
   @Override
-  public void onReceive(Object message) throws Exception {
+  public final void onReceive(final Object message) throws Exception {
     if (message instanceof StringMessage) {
       StringMessage stringMessage = (StringMessage) message;
-      MessageCounter++;
-      log.info("Received Message Number " + MessageCounter + " was: " + stringMessage.getMessage()
+      messageCounter++;
+      log.info("Received Message Number " + messageCounter + " was: " + stringMessage.getMessage()
           + " from: " + getSender());
-      ResultMessage resultMessage = new ResultMessage("Got it!", MessageCounter);
+      ResultMessage resultMessage = new ResultMessage("Got it!", messageCounter);
       getSender().tell(resultMessage, getSelf());
     } else {
       unhandled(message);

@@ -53,6 +53,7 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
         <configuration>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <configLocation>${basedir}/properties/eclipse-java-google-style.xml</configLocation>
         </configuration>
         <reportSets>
           <reportSet>

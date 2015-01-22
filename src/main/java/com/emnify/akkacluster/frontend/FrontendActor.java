@@ -15,13 +15,12 @@ import akka.routing.FromConfig;
  *
  */
 public class FrontendActor extends UntypedActor {
-  LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+  private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
-  int jobCounter = 0;
-  ActorRef router = getContext().actorOf(FromConfig.getInstance().props(), "router");
+  private ActorRef router = getContext().actorOf(FromConfig.getInstance().props(), "router");
 
   @Override
-  public void onReceive(Object message) throws Exception {
+  public final void onReceive(final Object message) throws Exception {
     if (message instanceof StringMessage) {
       StringMessage job = (StringMessage) message;
       router.tell(job, getSelf());
