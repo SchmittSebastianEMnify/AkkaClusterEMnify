@@ -4,6 +4,7 @@ import com.emnify.akkacluster.ResultMessage;
 import com.emnify.akkacluster.StringMessage;
 
 import akka.actor.ActorRef;
+import akka.actor.Status;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
@@ -21,15 +22,20 @@ public class FrontendActor extends UntypedActor {
 
   @Override
   public final void onReceive(final Object message) throws Exception {
-    if (message instanceof StringMessage) {
-      StringMessage job = (StringMessage) message;
-      router.tell(job, getSelf());
-    } else if (message instanceof ResultMessage) {
-      ResultMessage result = (ResultMessage) message;
-      log.info("Answer: " + result.getAnswer() + " - " + result.getSenderCounterValue() + " from: "
-          + getSender());
-    } else {
-      unhandled(message);
+    try {
+      if (message instanceof StringMessage) {
+        StringMessage job = (StringMessage) message;
+        router.tell(job, getSelf());
+      } else if (message instanceof ResultMessage) {
+        ResultMessage result = (ResultMessage) message;
+        log.info("Answer: " + result.getAnswer() + " - " + result.getSenderCounterValue() + " from: "
+            + getSender());
+      } else {
+        unhandled(message);
+      }
+    } catch (Exception e) {
+      getSender().tell(new Status.Failure(e), getSelf());
+      throw e;
     }
   }
 }
