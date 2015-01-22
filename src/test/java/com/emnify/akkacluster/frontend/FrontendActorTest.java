@@ -71,8 +71,8 @@ public class FrontendActorTest {
       {
         final ActorRef service = fsystem.actorOf(Props.create(FrontendActor.class), "frontend");
         final ActorRef probe = getRef();
-        System.out.println(service);
         fsystem.eventStream().subscribe(getRef(), UnhandledMessage.class);
+        // StringMessage and ResultMessage are handled
         service.tell(new StringMessage("normal test"), probe);
         service.tell(new ResultMessage("Got it!", 1L), probe);
         expectNoMsg();
