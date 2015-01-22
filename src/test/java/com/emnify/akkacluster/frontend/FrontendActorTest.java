@@ -7,10 +7,10 @@ import com.typesafe.config.ConfigFactory;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.actor.UnhandledMessage;
 import akka.testkit.JavaTestKit;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -24,8 +24,8 @@ public class FrontendActorTest {
   /**
    * setup before every test case
    */
-  @BeforeClass
-  public static void setup() {
+  @Before
+  public void setup() {
     fsystem = ActorSystem.create("ClusterSystem", ConfigFactory.load("frontend"));
     bsystem = ActorSystem.create("ClusterSystem", ConfigFactory.load("backend"));
   }
@@ -33,8 +33,8 @@ public class FrontendActorTest {
   /**
    * tear down after every test case
    */
-  @AfterClass
-  public static void tearDown() {
+  @After
+  public void tearDown() {
     JavaTestKit.shutdownActorSystem(fsystem);
     fsystem = null;
     JavaTestKit.shutdownActorSystem(bsystem);
@@ -52,9 +52,11 @@ public class FrontendActorTest {
       {
         final ActorRef service = fsystem.actorOf(Props.create(FrontendActor.class), "frontend");
         final ActorRef probe = getRef();
+        fsystem.eventStream().subscribe(getRef(), UnhandledMessage.class);
+
         // FrontendActor expects a StringMessage, simple strings are not handled
         service.tell("unhandled test", probe);
-        expectNoMsg();
+        expectMsgClass(UnhandledMessage.class);
       }
     };
   }
@@ -69,6 +71,8 @@ public class FrontendActorTest {
       {
         final ActorRef service = fsystem.actorOf(Props.create(FrontendActor.class), "frontend");
         final ActorRef probe = getRef();
+        fsystem.eventStream().subscribe(getRef(), UnhandledMessage.class);
+        // StringMessage and ResultMessage are handled
         service.tell(new StringMessage("normal test"), probe);
         service.tell(new ResultMessage("Got it!", 1L), probe);
         expectNoMsg();

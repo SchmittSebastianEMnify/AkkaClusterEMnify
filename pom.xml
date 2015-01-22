@@ -7,6 +7,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <checkstyle.config.location>${basedir}/properties/checkstyle.xml</checkstyle.config.location>
   </properties>
 
   <reporting>
@@ -53,6 +54,7 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
         <configuration>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <configLocation>${basedir}/properties/eclipse-java-google-style.xml</configLocation>
         </configuration>
         <reportSets>
           <reportSet>

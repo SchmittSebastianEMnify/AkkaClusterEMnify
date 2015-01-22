@@ -4,6 +4,7 @@ import com.emnify.akkacluster.ResultMessage;
 import com.emnify.akkacluster.StringMessage;
 
 import akka.actor.ActorRef;
+import akka.actor.Status;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
@@ -15,21 +16,26 @@ import akka.routing.FromConfig;
  *
  */
 public class FrontendActor extends UntypedActor {
-  LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+  private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
-  int jobCounter = 0;
-  ActorRef router = getContext().actorOf(FromConfig.getInstance().props(), "router");
+  private ActorRef router = getContext().actorOf(FromConfig.getInstance().props(), "router");
 
   @Override
-  public void onReceive(Object message) throws Exception {
-    if (message instanceof StringMessage) {
-      StringMessage job = (StringMessage) message;
-      router.tell(job, getSelf());
-    } else if (message instanceof ResultMessage) {
-      ResultMessage result = (ResultMessage) message;
-      log.info("Answer: " + result.getAnswer() + " - " + result.getSenderCounterValue() + " from: "
-          + getSender());
+  public final void onReceive(final Object message) throws Exception {
+    try {
+      if (message instanceof StringMessage) {
+        StringMessage job = (StringMessage) message;
+        router.tell(job, getSelf());
+      } else if (message instanceof ResultMessage) {
+        ResultMessage result = (ResultMessage) message;
+        log.info("Answer: " + result.getAnswer() + " - " + result.getSenderCounterValue() + " from: "
+            + getSender());
+      } else {
+        unhandled(message);
+      }
+    } catch (Exception e) {
+      getSender().tell(new Status.Failure(e), getSelf());
+      throw e;
     }
-    unhandled(message);
   }
 }
