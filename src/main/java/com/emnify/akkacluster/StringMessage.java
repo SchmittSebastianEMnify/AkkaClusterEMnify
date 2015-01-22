@@ -26,4 +26,9 @@ public class StringMessage implements Serializable {
   public String getMessage() {
     return messageString;
   }
+
+  @Override
+  public String toString() {
+    return "StringMessage('" + messageString + "')";
+  }
 }

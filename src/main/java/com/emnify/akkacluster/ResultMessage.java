@@ -17,8 +17,6 @@ public class ResultMessage implements Serializable {
   private final String answerString;
   private final Long senderCounterValue;
 
-  /** label for watching the workers */
-  public static final String BACKEND_REGISTRATION = "BackendRegistration";
 
   /**
    * @param answerString

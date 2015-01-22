@@ -1,13 +1,14 @@
 package com.emnify.akkacluster.frontend;
 
+import com.emnify.akkacluster.ResultMessage;
 import com.emnify.akkacluster.StringMessage;
+import com.typesafe.config.ConfigFactory;
 
-import static com.emnify.akkacluster.ResultMessage.BACKEND_REGISTRATION;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
-import akka.actor.Status;
 import akka.testkit.JavaTestKit;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,77 +18,60 @@ import org.junit.Test;
  * @see FrontendActor
  */
 public class FrontendActorTest {
-  static ActorSystem system;
+  static ActorSystem fsystem;
+  static ActorSystem bsystem;
 
   /**
-   * setup before every testcase
+   * setup before every test case
    */
   @BeforeClass
   public static void setup() {
-    system = ActorSystem.create("FrontendActorTest");
+    fsystem = ActorSystem.create("ClusterSystem", ConfigFactory.load("frontend"));
+    bsystem = ActorSystem.create("ClusterSystem", ConfigFactory.load("backend"));
   }
 
   /**
-   * tear down after every testcase
+   * tear down after every test case
    */
   @AfterClass
   public static void tearDown() {
-    JavaTestKit.shutdownActorSystem(system);
-    system = null;
+    JavaTestKit.shutdownActorSystem(fsystem);
+    fsystem = null;
+    JavaTestKit.shutdownActorSystem(bsystem);
+    bsystem = null;
   }
 
-  /**
-   * no backend available -> Status.Failure response
-   */
-  @Test
-  public void testNoBackendFailure() {
-    new JavaTestKit(system) {
-      {
-        final ActorRef service = system.actorOf(Props.create(FrontendActor.class));
-        final ActorRef probe = getRef();
 
-        StringMessage msg = new StringMessage("test");
-        service.tell(msg, probe);
-        expectMsgClass(Status.Failure.class);
-
-      }
-    };
-  }
 
   /**
-   * unhandled message type-> no response
+   * unhandled message type
    */
   @Test
   public void testUnhandledMsg() {
-    new JavaTestKit(system) {
+    new JavaTestKit(fsystem) {
       {
-        final ActorRef service = system.actorOf(Props.create(FrontendActor.class));
+        final ActorRef service = fsystem.actorOf(Props.create(FrontendActor.class), "frontend");
         final ActorRef probe = getRef();
         // FrontendActor expects a StringMessage, simple strings are not handled
-        service.tell("test", probe);
+        service.tell("unhandled test", probe);
         expectNoMsg();
       }
     };
   }
 
   /**
-   * Register backend -> sending the StringMessage completes successfully
+   * Normal flow, send a StringMessage and a ResultMessage
    */
   @Test
   public void testNormalFlow() {
 
-    new JavaTestKit(system) {
+    new JavaTestKit(fsystem) {
       {
-        final ActorRef service = system.actorOf(Props.create(FrontendActor.class));
+        final ActorRef service = fsystem.actorOf(Props.create(FrontendActor.class), "frontend");
         final ActorRef probe = getRef();
-
-        // register a backend
-        service.tell(BACKEND_REGISTRATION, probe);
-
-        // send message successfully
-        StringMessage msg = new StringMessage("test");
-        service.tell(msg, probe);
-        expectMsgEquals(msg);
+        service.tell(new StringMessage("normal test"), probe);
+        service.tell(new ResultMessage("Got it!", 1L), probe);
+        expectNoMsg();
       }
     };
   }
