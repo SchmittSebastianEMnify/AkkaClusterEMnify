@@ -28,7 +28,8 @@ public class FrontendActor extends UntypedActor {
       ResultMessage result = (ResultMessage) message;
       log.info("Answer: " + result.getAnswer() + " - " + result.getSenderCounterValue() + " from: "
           + getSender());
+    } else {
+      unhandled(message);
     }
-    unhandled(message);
   }
 }
